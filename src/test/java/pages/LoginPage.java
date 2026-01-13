@@ -1,11 +1,11 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+
 /**
  * Эта страница описывает страницу авторизации
- * */
+ */
 
 public class LoginPage extends BasePage {
     private final By loginField = By.xpath("//*[@id='user-name']");
@@ -21,7 +21,13 @@ public class LoginPage extends BasePage {
         driver.get(BASE_URL);
     }
 
-    public void login(final String login, final String password) {
+    public void login(final String login, final String password) throws InterruptedException {
+        driver.findElement(loginField).sendKeys(login);
+        Thread.sleep(9000);
+        driver.findElement(loginField).sendKeys(Keys.CONTROL + "A");
+        driver.findElement(loginField).sendKeys(Keys.BACK_SPACE);
+        Thread.sleep(9000);
+
         driver.findElement(loginField).sendKeys(login);
         driver.findElement(passwordField).sendKeys(password);
         driver.findElement(loginBtn).click();
@@ -30,5 +36,9 @@ public class LoginPage extends BasePage {
     public String checkErrorMsg() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(errorMsg));
         return driver.findElement(errorMsg).getText();
+    }
+
+    public String checkLoginBtnColor() {
+        return driver.findElement(loginBtn).getCssValue("background-color");
     }
 }
